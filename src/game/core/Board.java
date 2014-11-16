@@ -1,14 +1,13 @@
 package game.core;
 
-import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.Collection;
 
 public class Board {
-	private static final int NUM_ROWS = 20;
-	private static final int NUM_COLS = 10;
+	public static final int NUM_ROWS = 24;
+	public static final int NUM_COLS = 10;
 	private AbstractBlock[][] blocks;
 	private Point2D pos;
 	
@@ -22,8 +21,14 @@ public class Board {
 				blocks[i][j] = new NullBlock(this, i, j);
 			}
 		}
-		
-		blocks[1][2] = new RealBlock(this, 1, 2, Color.BLUE);
+	}
+	
+	public boolean canPlaceAt(int row, int col) {
+		if (row < NUM_ROWS && row >= 0 && col < NUM_COLS && col >= 0) {
+			return !(blocks[row][col] instanceof RealBlock);
+		} else {
+			return false;
+		}
 	}
 	
 	public void placeBlock(AbstractBlock block, int row, int col) {

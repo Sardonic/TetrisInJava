@@ -1,14 +1,12 @@
 package game;
 
 import java.awt.BorderLayout;
-import java.awt.Dimension;
-import java.awt.Graphics;
-import java.awt.Insets;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
-import java.awt.image.BufferStrategy;
 
 import javax.swing.*;
 
@@ -18,6 +16,8 @@ public class GameWindow extends JFrame
 {	
 	public static final int MAX_WIDTH = 640;
 	public static final int MAX_HEIGHT = 480;
+	public static final double FPS = 30;
+	public static final long MS_FRAME_DELAY = (long)(1000 / FPS);
 	
 	private final int width;
 	private final int height;
@@ -46,12 +46,13 @@ public class GameWindow extends JFrame
 		
 		addKeyListener(makeKeyListener());
 		addWindowListener(makeWindowListener());
+		addKeyListener(manager);
 		startGameLoop();
 	}
 
 	private KeyListener makeKeyListener()
 	{
-		KeyListener kbListener = new KeyListener()
+		KeyListener kbListener = new KeyAdapter()
 		{
 			public void keyPressed(KeyEvent e)
 			{
@@ -60,10 +61,6 @@ public class GameWindow extends JFrame
 					shouldRun = false;
 				}
 			}
-
-			public void keyReleased(KeyEvent e) {}
-
-			public void keyTyped(KeyEvent e) {}
 		};
 		
 		return kbListener;
@@ -71,24 +68,12 @@ public class GameWindow extends JFrame
 	
 	private WindowListener makeWindowListener()
 	{
-		WindowListener winListener = new WindowListener()
+		WindowListener winListener = new WindowAdapter()
 		{
 			public void windowClosing(WindowEvent arg0)
 			{
 				shouldRun = false;
 			}
-			
-			public void windowActivated(WindowEvent arg0) {}
-
-			public void windowClosed(WindowEvent arg0) {}
-
-			public void windowDeactivated(WindowEvent arg0) {}
-
-			public void windowDeiconified(WindowEvent arg0) {}
-
-			public void windowIconified(WindowEvent arg0) {}
-
-			public void windowOpened(WindowEvent arg0) {}
 		};
 		
 		return winListener;
@@ -113,10 +98,23 @@ public class GameWindow extends JFrame
 	{		 		
 		while(shouldRun)
 		{
-			double currentTime = System.currentTimeMillis();
-			double elapsedTime = currentTime - lastUpdateTime;
+			long currentTime = System.currentTimeMillis();
+			long elapsedTime = (long) (currentTime - lastUpdateTime);
+			long endTime;
 			manager.update(elapsedTime);
-			lastUpdateTime = currentTime;
+			
+			repaint();
+			
+			endTime = System.currentTimeMillis();
+			long timeDiff = endTime - currentTime;
+			
+			if (timeDiff < MS_FRAME_DELAY) {
+                try {
+                    Thread.sleep((long)MS_FRAME_DELAY - timeDiff);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+			}
 		}
 		
 		exit();
