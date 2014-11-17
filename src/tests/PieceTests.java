@@ -65,4 +65,18 @@ public class PieceTests {
 		piece.move(GameManager.LEFT);
 		assertTrue(piece.checkCollision(GameManager.LEFT));
 	}
+	
+	@Test
+	public void testRemoveBlocks() {
+		piece.removeBlocks();
+		for (Point point : ORIG_LOCATIONS) {
+			assertFalse(board.isBlockAtLocation(point.y, point.x));
+		}
+	}
+	
+	@Test
+	public void testDrop() {
+		piece.drop();
+		assertTrue(piece.checkCollision(GameManager.DOWN));
+	}
 }
