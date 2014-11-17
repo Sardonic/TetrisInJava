@@ -9,11 +9,21 @@ public abstract class AbstractBlock {
 	protected int row;
 	protected int col;
 	protected Board board;
+	protected Color color;
+	protected boolean isSolid = false;
 	
 	public AbstractBlock(Board board, int row, int col) {
 		this.row = row;
 		this.col = col;
 		this.board = board;
+		color = Color.WHITE;
+	}
+
+	public AbstractBlock(AbstractBlock block) {
+		this.row = block.row;
+		this.col = block.col;
+		this.board = block.board;
+		this.color = block.color;
 	}
 
 	public void draw(Graphics g) {

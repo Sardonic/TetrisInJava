@@ -8,6 +8,15 @@ public class NullBlock extends AbstractBlock {
 		super(board, row, col);
 	}
 
+	public NullBlock(AbstractBlock block) {
+		super(block);
+		
+		this.row = block.row;
+		this.col = block.col;
+		this.board = block.board;
+		this.color = block.color;
+	}
+
 	@Override
 	public void draw(Graphics g) {
 		super.draw(g);

@@ -6,14 +6,21 @@ import java.awt.geom.Point2D;
 
 public class RealBlock extends AbstractBlock {
 
-	private Color color;
-	
 	public RealBlock(Board board, int row, int col, Color color) {
 		super(board, row, col);
 		this.color = color;
+		isSolid = true;
 	}
 	
-	
+	public RealBlock(AbstractBlock block) {
+		super(block);
+		
+		this.row = block.row;
+		this.col = block.col;
+		this.board = block.board;
+		this.color = block.color;
+	}
+
 	@Override
 	public void draw(Graphics g) {
 		Point2D pos = board.getPixelPosAtIndex(row, col);

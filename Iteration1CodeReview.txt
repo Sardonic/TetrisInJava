@@ -1,0 +1,6 @@
+Reviewers: Jack Storm
+
+Code is very clean and concise
+Right now everything has a reference to the board, the Pieces, and the different block classes. 
+Would there be a better way to do it so that not everything needs to have a reference to the board?
+

@@ -19,9 +19,9 @@ public class Piece {
 	private boolean moveMaxSpeed;
 	private static double MIN_SECONDS_BETWEEN_MOVES = 0.1;
 	
-	public Piece(Board board, Point[] blockLocations, Color color) {
+	public Piece(Board board, Point[] blockLocations, Color color, double secondsBetweenMoves) {
 		gameBoard = board;
-		secondsBetweenMoves = 0.5;
+		this.secondsBetweenMoves = secondsBetweenMoves;
 		this.blockLocations = blockLocations;
 		this.color = color;
 		this.framesUntilMove = (int)(GameWindow.FPS * secondsBetweenMoves);
@@ -53,7 +53,7 @@ public class Piece {
 		framesUntilMove--;
 
 		if (framesUntilMove <= 0) {
-			if (moveMaxSpeed) {
+			if (moveMaxSpeed || secondsBetweenMoves < MIN_SECONDS_BETWEEN_MOVES) {
 				framesUntilMove = (int)(GameWindow.FPS * MIN_SECONDS_BETWEEN_MOVES);
 			} else {
                 framesUntilMove = (int)(GameWindow.FPS * secondsBetweenMoves);
@@ -111,30 +111,30 @@ public class Piece {
 	}
 	
 	public void rotate(boolean clockwise) {
-		//TODO: Implement this guy
-		//int[][] matrix = new int[2][2];
-		
-		/*
-		matrix[1][0] = 0;
-		matrix[0][1] = 0;
-		
-		if (clockwise) {
-			matrix[0][0] = -1;
-			matrix[1][1] = 1;
-		} else {
-			matrix[0][0] = 1;
-			matrix[-1][-1] = -1;
-		}
-		*/
-		
 		Point[] newBlockLocs = new Point[4];
 		boolean doRotation = true;
+		Point oldLowestLoc = new Point(0,0);
+		Point oldRightestLoc = new Point(0, 0);
+		
+		for(Point p : blockLocations) {
+			if(p.y > oldLowestLoc.y){
+				oldLowestLoc.y = p.y;
+			}
+			
+			if(p.x > oldRightestLoc.x) {
+				oldRightestLoc.x = p.x;
+			}
+		}
 		
 		int averageX = (blockLocations[0].x + blockLocations[1].x + blockLocations[2].x + blockLocations[3].x) / 4;
 		int averageY = (blockLocations[0].y + blockLocations[1].y + blockLocations[2].y + blockLocations[3].y) / 4;
 		
 		int xTranslate = -averageX;
 		int yTranslate = -averageY;
+
+		if(clockwise) {
+			xTranslate--;
+		}
 		
 		removeBlocks();
 
@@ -148,18 +148,16 @@ public class Piece {
 			newBlockLoc.x += xTranslate;
 			newBlockLoc.y += yTranslate;
 			
-			//newBlockLoc[1] *= -1;
-			
-			// Matrix multiplication!
-			{
-				int oldX = newBlockLoc.x;
-				int oldY = newBlockLoc.y;
-				
+			int oldX = newBlockLoc.x;
+			int oldY = newBlockLoc.y;
+
+			if(clockwise) {
+				newBlockLoc.x = -oldY;
+				newBlockLoc.y = oldX;
+			} else {
 				newBlockLoc.x = oldY;
 				newBlockLoc.y = -oldX;
 			}
-			
-			//newBlockLoc[1] *= -1;
 			
 			newBlockLoc.x -= xTranslate;
 			newBlockLoc.y -= yTranslate;
@@ -176,11 +174,33 @@ public class Piece {
 		
 		if (doRotation) {
 			blockLocations = newBlockLocs;
-			for(Point blockLoc : blockLocations) {
-				int row = blockLoc.y;
-				int col = blockLoc.x;
-				gameBoard.placeBlock(new RealBlock(gameBoard, row, col, color), row, col);
+			
+			Point newLowestLoc = new Point(0,0);
+			Point newRightestLoc = new Point(0,0);
+			
+			for(Point p : blockLocations) {
+				if(p.y > newLowestLoc.y) {
+					newLowestLoc.y = p.y;
+				}
+				
+				if(p.x > newRightestLoc.x) {
+					newRightestLoc.x = p.x;
+				}
 			}
+			
+			for(int i = 0; i < oldLowestLoc.y - newLowestLoc.y; ++i) {
+				move(GameManager.DOWN);
+			}
+			
+			if(newRightestLoc.x > oldRightestLoc.x) {
+				move(GameManager.LEFT);
+			}
+		}
+
+		for(Point blockLoc : blockLocations) {
+			int row = blockLoc.y;
+			int col = blockLoc.x;
+			gameBoard.placeBlock(new RealBlock(gameBoard, row, col, color), row, col);
 		}
 	}
 	
