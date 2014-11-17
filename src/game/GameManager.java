@@ -15,7 +15,6 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
-import java.util.Collection;
 
 @SuppressWarnings("serial")
 public class GameManager extends JPanel implements KeyListener {

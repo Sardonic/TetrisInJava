@@ -97,7 +97,7 @@ public class Piece {
 	public void drop() {
 		while (move(GameManager.DOWN))
 		{
-			// Empty. All logic is in the test!
+			// Empty. All logic is in the while loop!
 		}
 	}
 	
@@ -211,12 +211,8 @@ public class Piece {
 		for(Point blockLoc : blockLocations) {
 			int row = blockLoc.y + direction.y;
 			int col = blockLoc.x + direction.x;
-			
-			boolean outOfBoundsLeft = col < 0;
-			boolean outOfBoundsRight = col > Board.NUM_COLS - 1;
-			boolean collide = row > Board.NUM_ROWS - 1 || !gameBoard.canPlaceAt(row, col);
 
-			if(collide || outOfBoundsLeft || outOfBoundsRight) {
+			if (!gameBoard.canPlaceAt(row, col)) {
 				willCollide = true;
 			}
 		}

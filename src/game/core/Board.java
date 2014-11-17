@@ -3,7 +3,6 @@ package game.core;
 import java.awt.Graphics;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
-import java.util.Collection;
 
 public class Board {
 	public static final int NUM_ROWS = 22;
@@ -28,7 +27,7 @@ public class Board {
 	
 	public boolean canPlaceAt(int row, int col) {
 		if (row < NUM_ROWS && row >= 0 && col < NUM_COLS && col >= 0) {
-			return !(blocks[row][col] instanceof RealBlock);
+			return !(blocks[row][col].isSolid());
 		} else {
 			return false;
 		}
@@ -43,11 +42,11 @@ public class Board {
 	}
 	
 	public boolean isBlockAtLocation(int row, int col) {
-		if(blocks[row][col] instanceof RealBlock) {
-			return true;
+		if (row < NUM_ROWS && row >= 0 && col < NUM_COLS && col >= 0) {
+			return blocks[row][col].isSolid();
+		} else {
+			return false;
 		}
-		
-		return false;
 	}
 	
 	public void draw(Graphics g) {
@@ -70,7 +69,7 @@ public class Board {
 			AbstractBlock[] row = blocks[i];
 			
 			for(AbstractBlock block : row) {
-				if(block instanceof NullBlock) {
+				if(!block.isSolid()) {
 					isRowFull = false;
 					break;
 				}
@@ -110,7 +109,7 @@ public class Board {
 			for(AbstractBlock block : blocks[i]) {
 				AbstractBlock newBlock;
 				
-				if(block.isSolid) {
+				if(block.isSolid()) {
 					newBlock = new RealBlock(block.board, block.row + translationAmount, block.col, block.color);
 				} else {
 					newBlock = new NullBlock(block.board, block.row + translationAmount, block.col);
@@ -129,8 +128,8 @@ public class Board {
 
 	public boolean checkLoss() {
 		for(int i = 0; i < NUM_COLS; ++i) {
-			boolean firstRowNull = blocks[0][i] instanceof NullBlock;
-			boolean secondRowNull = blocks[1][i] instanceof NullBlock;
+			boolean firstRowNull = !blocks[0][i].isSolid();
+			boolean secondRowNull = !blocks[1][i].isSolid();
 
 			if(!firstRowNull || !secondRowNull) {
 				return true;

@@ -22,8 +22,7 @@ public class NullBlock extends AbstractBlock {
 		super.draw(g);
 	}
 
-	public boolean checkCollision() {
-		// TODO Auto-generated method stub
+	public boolean isSolid() {
 		return false;
 	}
 

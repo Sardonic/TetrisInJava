@@ -10,7 +10,6 @@ public abstract class AbstractBlock {
 	protected int col;
 	protected Board board;
 	protected Color color;
-	protected boolean isSolid = false;
 	
 	public AbstractBlock(Board board, int row, int col) {
 		this.row = row;
@@ -33,5 +32,5 @@ public abstract class AbstractBlock {
 		int y = (int)pos.getY();
 		g.drawRect(x, y, SIZE, SIZE);
 	}
-	public abstract boolean checkCollision();
+	public abstract boolean isSolid();
 }

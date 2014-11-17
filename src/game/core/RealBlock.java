@@ -9,7 +9,6 @@ public class RealBlock extends AbstractBlock {
 	public RealBlock(Board board, int row, int col, Color color) {
 		super(board, row, col);
 		this.color = color;
-		isSolid = true;
 	}
 	
 	public RealBlock(AbstractBlock block) {
@@ -34,9 +33,8 @@ public class RealBlock extends AbstractBlock {
 		super.draw(g);
 	}
 
-	public boolean checkCollision() {
-		// TODO Auto-generated method stub
-		return false;
+	public boolean isSolid() {
+		return true;
 	}
 	
 }
