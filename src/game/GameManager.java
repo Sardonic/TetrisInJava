@@ -6,6 +6,7 @@ import java.awt.Point;
 
 import game.core.Board;
 import game.core.Piece;
+import game.core.UserInterface;
 import game.factories.PieceFactory;
 
 import javax.swing.JPanel;
@@ -37,8 +38,9 @@ public class GameManager extends JPanel implements KeyListener {
 	private int currentPieceSpeedCounter;
 	private int currentScore;
 	private int highScore = 0;
+	private UserInterface ui;
 	
-	Board gameBoard;
+	private Board gameBoard;
 
 	public GameManager(int width, int height) {
 		this.width = width;
@@ -51,6 +53,8 @@ public class GameManager extends JPanel implements KeyListener {
 		init();
 		
 		currentPiece = PieceFactory.generateRandomPiece(gameBoard, currentPieceSpeed);
+		ui = new UserInterface();
+		gameBoard.addObserver(ui);
 	}
 	
 	private void init() {
@@ -72,6 +76,7 @@ public class GameManager extends JPanel implements KeyListener {
 		g.fillRect(0, 0, width, height);
 		
 		gameBoard.draw(g);
+		ui.draw(g);
 	}
 
 	public void update(double time) {
