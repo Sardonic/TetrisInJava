@@ -4,19 +4,17 @@ import java.awt.Graphics;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
 
-public class Board implements BoardObservable {
+public class Board {
 	public static final int NUM_ROWS = 22;
 	public static final int NUM_COLS = 10;
 	
 	private AbstractBlock[][] blocks;
 	private Point2D pos;
-	private ArrayList<BoardObserver> observers;
 	
 	public Board(Point2D pos, int width, int height) {
 		AbstractBlock.SIZE = height / NUM_ROWS;
 		this.pos = pos;
 		blocks = new AbstractBlock[NUM_ROWS][NUM_COLS];
-		observers = new ArrayList<BoardObserver>();
 	}
 	
 	public void init() {
@@ -102,8 +100,6 @@ public class Board implements BoardObservable {
 
 		dropRows(rowsToRemove.get(0), rowsToRemove.get(rowsToRemove.size() -1));
 		
-		notifyObservers(lines);
-
 		return lines;
 	}
 
@@ -141,22 +137,5 @@ public class Board implements BoardObservable {
 			}
 		}
 		return false;
-	}
-
-	@Override
-	public void addObserver(BoardObserver o) {
-		observers.add(o);
-	}
-
-	@Override
-	public void removeObserver(BoardObserver o) {
-		observers.remove(o);
-	}
-
-	@Override
-	public void notifyObservers(int rowsRemoved) {
-		for (BoardObserver o : observers) {
-			o.update(rowsRemoved);
-		}
 	}
 }

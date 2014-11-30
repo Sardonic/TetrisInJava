@@ -50,11 +50,10 @@ public class GameManager extends JPanel implements KeyListener {
 		
 		Point2D boardPos = new Point2D.Double(width / 3, -(height / Board.NUM_ROWS) * 2);
 		gameBoard = new Board(boardPos, width, height);
+		ui = new UserInterface();
 		init();
 		
 		currentPiece = PieceFactory.generateRandomPiece(gameBoard, currentPieceSpeed);
-		ui = new UserInterface();
-		gameBoard.addObserver(ui);
 	}
 	
 	private void init() {
@@ -63,6 +62,7 @@ public class GameManager extends JPanel implements KeyListener {
 		currentPieceSpeedCounter = 0;
 		currentScore = 0;
 		gameBoard.init();
+		ui.restart();
 	}
 	@Override
 	public Dimension getPreferredSize() {
@@ -99,8 +99,7 @@ public class GameManager extends JPanel implements KeyListener {
 					currentPieceSpeedCounter -= LINES_CLEARED_TO_SPEEDUP;
 				}
 
-				System.out.println("Lines Cleared: " + linesCleared);
-				System.out.println("Current Score: " + currentScore);
+				ui.update(currentScore, linesCleared);
 			}
 
 			boolean lost = gameBoard.checkLoss();
@@ -111,6 +110,7 @@ public class GameManager extends JPanel implements KeyListener {
 				if(currentScore > highScore) {
 					System.out.println("New Highscore!");
 					highScore = currentScore;
+					ui.endGameUpdate(highScore);
 				}
 				init();
 			}
