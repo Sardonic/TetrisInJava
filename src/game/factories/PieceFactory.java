@@ -9,6 +9,7 @@ import game.core.Piece;
 
 public class PieceFactory {
 	
+	private static int spawnRow = 0;
 	private static Random rand = new Random();
 
 	public static Piece generateRandomPiece(Board board, double secondsBetweenMoves) {
@@ -49,10 +50,10 @@ public class PieceFactory {
 	public static Piece generateLPiece(Board board, double secondsBetweenMoves) {
 		Color color = Color.BLUE;
 		Point[] locations = new Point[4];
-		locations[0] = new Point(3, 1);
-		locations[1] = new Point(3, 0);
-		locations[2] = new Point(4, 0);
-		locations[3] = new Point(5, 0);
+		locations[0] = new Point(3, spawnRow + 1);
+		locations[1] = new Point(3, spawnRow);
+		locations[2] = new Point(4, spawnRow);
+		locations[3] = new Point(5, spawnRow);
 		
 		Piece returnPiece = new Piece(board, locations, color, secondsBetweenMoves);
 		return returnPiece;
@@ -62,10 +63,10 @@ public class PieceFactory {
 		Color color = Color.ORANGE;
 		//Point[] locations = {{1, 5}, {0, 3}, {0, 4}, {0, 5}};
 		Point[] locations = new Point[4];
-		locations[0] = new Point(5, 1);
-		locations[1] = new Point(3, 0);
-		locations[2] = new Point(4, 0);
-		locations[3] = new Point(5, 0);
+		locations[0] = new Point(5, spawnRow + 1);
+		locations[1] = new Point(3, spawnRow);
+		locations[2] = new Point(4, spawnRow);
+		locations[3] = new Point(5, spawnRow);
 		
 		Piece returnPiece = new Piece(board, locations, color, secondsBetweenMoves);
 		return returnPiece;
@@ -75,10 +76,10 @@ public class PieceFactory {
 		Color color = Color.RED;
 		//Point[] locations = {{0, 3}, {0, 4}, {1, 4}, {1, 5}};
 		Point[] locations = new Point[4];
-		locations[0] = new Point(3, 0);
-		locations[1] = new Point(4, 0);
-		locations[2] = new Point(4, 1);
-		locations[3] = new Point(5, 1);
+		locations[0] = new Point(3, spawnRow);
+		locations[1] = new Point(4, spawnRow);
+		locations[2] = new Point(4, spawnRow + 1);
+		locations[3] = new Point(5, spawnRow + 1);
 		
 		Piece returnPiece = new Piece(board, locations, color, secondsBetweenMoves);
 		return returnPiece;
@@ -88,10 +89,10 @@ public class PieceFactory {
 		Color color = Color.GREEN;
 		//Point[] locations = {{1, 3}, {0, 4}, {1, 4}, {0, 5}};
 		Point[] locations = new Point[4];
-		locations[0] = new Point(3, 1);
-		locations[1] = new Point(4, 0);
-		locations[2] = new Point(4, 1);
-		locations[3] = new Point(5, 0);;
+		locations[0] = new Point(3, spawnRow + 1);
+		locations[1] = new Point(4, spawnRow);
+		locations[2] = new Point(4, spawnRow + 1);
+		locations[3] = new Point(5, spawnRow);;
 		
 		
 		Piece returnPiece = new Piece(board, locations, color, secondsBetweenMoves);
@@ -101,10 +102,10 @@ public class PieceFactory {
 	public static Piece generateTPiece(Board board, double secondsBetweenMoves) {
 		Color color = Color.PINK;
 		Point[] locations = new Point[4];
-		locations[0] = new Point(3, 0);
-		locations[1] = new Point(4, 0);
-		locations[2] = new Point(5, 0);
-		locations[3] = new Point(4, 1);
+		locations[0] = new Point(3, spawnRow);
+		locations[1] = new Point(4, spawnRow);
+		locations[2] = new Point(5, spawnRow);
+		locations[3] = new Point(4, spawnRow + 1);
 		
 		Piece returnPiece = new Piece(board, locations, color, secondsBetweenMoves);
 		return returnPiece;
@@ -113,10 +114,10 @@ public class PieceFactory {
 	public static Piece generateIPiece(Board board, double secondsBetweenMoves) {
 		Color color = Color.CYAN;
 		Point[] locations = new Point[4];
-		locations[0] = new Point(3, 0);
-		locations[1] = new Point(4, 0);
-		locations[2] = new Point(5, 0);
-		locations[3] = new Point(6, 0);
+		locations[0] = new Point(3, spawnRow);
+		locations[1] = new Point(4, spawnRow);
+		locations[2] = new Point(5, spawnRow);
+		locations[3] = new Point(6, spawnRow);
 		
 		Piece returnPiece = new Piece(board, locations, color, secondsBetweenMoves);
 		return returnPiece;
@@ -125,10 +126,10 @@ public class PieceFactory {
 	public static Piece generateOPiece(Board board, double secondsBetweenMoves) {
 		Color color = Color.MAGENTA;
 		Point[] locations = new Point[4];
-		locations[0] = new Point(4, 0);
-		locations[1] = new Point(5, 0);
-		locations[2] = new Point(4, 1);
-		locations[3] = new Point(5, 1);
+		locations[0] = new Point(4, spawnRow);
+		locations[1] = new Point(5, spawnRow);
+		locations[2] = new Point(4, spawnRow + 1);
+		locations[3] = new Point(5, spawnRow + 1);
 		
 		Piece returnPiece = new Piece(board, locations, color, secondsBetweenMoves);
 		return returnPiece;

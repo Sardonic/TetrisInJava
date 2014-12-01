@@ -25,45 +25,54 @@ public class GameManager extends JPanel implements KeyListener {
 	public static final Point RIGHT = new Point(1, 0);
 	private static final int LINE_SCORE = 100;
 	private static final int BONUS_SCORE = 300;
-	private static final int LINES_CLEARED_TO_SPEEDUP = 10;
-	private static final double PIECE_SPEED_INCREMENT = 0.05;
+	private static final int LINES_CLEARED_TO_SPEEDUP = 5;
+	private static final double PIECE_SPEED_INCREMENT = 0.1;
 
 	private final int width;
 	private final int height;
 	private final Color backgroundColor;
 
+	private Board gameBoard;
+
 	private Piece currentPiece;
 	private double currentPieceSpeed;
+
+	private Piece nextPiece;
+
 	private int linesCleared;
 	private int currentPieceSpeedCounter;
 	private int currentScore;
 	private int highScore = 0;
 	private UserInterface ui;
 	
-	private Board gameBoard;
+	private TetrisMomento savedState;
 
 	public GameManager(int width, int height) {
 		this.width = width;
 		this.height = height;
 		
 		backgroundColor = Color.WHITE;
-		
+
 		Point2D boardPos = new Point2D.Double(width / 3, -(height / Board.NUM_ROWS) * 2);
 		gameBoard = new Board(boardPos, width, height);
+
 		ui = new UserInterface();
 		init();
 		
 		currentPiece = PieceFactory.generateRandomPiece(gameBoard, currentPieceSpeed);
+		nextPiece = PieceFactory.generateRandomPiece(gameBoard, currentPieceSpeed);
+		ui.newPiece(nextPiece);
 	}
 	
 	private void init() {
-		currentPieceSpeed = 0.7;
+		currentPieceSpeed = 1;
 		linesCleared = 0;
 		currentPieceSpeedCounter = 0;
 		currentScore = 0;
 		gameBoard.init();
 		ui.restart();
 	}
+
 	@Override
 	public Dimension getPreferredSize() {
 		return new Dimension(width, height);
@@ -114,8 +123,10 @@ public class GameManager extends JPanel implements KeyListener {
 				}
 				init();
 			}
-
-			currentPiece = PieceFactory.generateRandomPiece(gameBoard, currentPieceSpeed);
+            currentPiece = nextPiece;
+			nextPiece = PieceFactory.generateRandomPiece(gameBoard, currentPieceSpeed);
+			
+			ui.newPiece(nextPiece);
 		}
         
 	}
@@ -142,7 +153,15 @@ public class GameManager extends JPanel implements KeyListener {
 		else if (e.getKeyCode() == KeyEvent.VK_UP) {
 			currentPiece.drop();
 		}
+		else if (e.getKeyCode() == KeyEvent.VK_W) {
+			savedState = createMomento();
+		}
 		
+	}
+
+	private TetrisMomento createMomento() {
+		TetrisMomento newMomento = new TetrisMomento();
+		return newMomento;
 	}
 
 	public void keyReleased(KeyEvent e) {

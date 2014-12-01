@@ -32,7 +32,7 @@ public class RealBlock extends AbstractBlock {
 
 		super.draw(g);
 	}
-
+	
 	public boolean isSolid() {
 		return true;
 	}

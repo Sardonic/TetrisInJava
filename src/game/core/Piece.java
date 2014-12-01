@@ -4,6 +4,7 @@ import game.GameManager;
 import game.GameWindow;
 
 import java.awt.Color;
+import java.awt.Graphics;
 import java.awt.Point;
 
 public class Piece {
@@ -27,8 +28,6 @@ public class Piece {
 		this.framesUntilMove = (int)(GameWindow.FPS * secondsBetweenMoves);
 		this.landed = false;
 		this.moveMaxSpeed = false;
-		
-		init();
 	}
 
 	public void init() {
@@ -40,15 +39,24 @@ public class Piece {
 	}
 
 	public void removeBlocks() {
-		
 		for(Point blockLoc : blockLocations) {
 			int row = blockLoc.y;
 			int col = blockLoc.x;
 			gameBoard.removeBlock(row, col);
 		}
-			
 	}
 	
+	public void fakeDraw(Graphics g, int blockSize, Point pos) {
+		for(Point blockLoc : blockLocations) {
+			int x = blockLoc.x;
+			x -= 2;
+			int y = blockLoc.y;
+			
+			g.setColor(color);
+			g.fillRect(pos.x + x * blockSize, pos.y + y * blockSize, blockSize, blockSize);
+		}
+	}
+		
 	public boolean update() {
 		framesUntilMove--;
 
