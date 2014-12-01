@@ -24,10 +24,9 @@ public class BoardTests {
 	public void init() {
 		// These don't really matter for the sake of testing
 		Point2D location = new Point2D.Double(0, 0);
-		int width = 640;
 		int height = 480;
 		
-		board = new Board(location, width, height);
+		board = new Board(location, height);
 		board.init();
 		
 		MockitoAnnotations.initMocks(this);
@@ -109,5 +108,12 @@ public class BoardTests {
 		}
 		
 		assertTrue(board.checkLoss());
+	}
+	
+	@Test
+	public void testCopy() {
+		Board board2 = board.copy();
+		assertTrue(board2.equals(board));
+		assertFalse(board == board2);
 	}
 }

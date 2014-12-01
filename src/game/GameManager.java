@@ -25,7 +25,7 @@ public class GameManager extends JPanel implements KeyListener {
 	public static final Point RIGHT = new Point(1, 0);
 	private static final int LINE_SCORE = 100;
 	private static final int BONUS_SCORE = 300;
-	private static final int LINES_CLEARED_TO_SPEEDUP = 5;
+	private static final int LINES_CLEARED_TO_SPEEDUP = 4;
 	private static final double PIECE_SPEED_INCREMENT = 0.1;
 
 	private final int width;
@@ -54,9 +54,9 @@ public class GameManager extends JPanel implements KeyListener {
 		backgroundColor = Color.WHITE;
 
 		Point2D boardPos = new Point2D.Double(width / 3, -(height / Board.NUM_ROWS) * 2);
-		gameBoard = new Board(boardPos, width, height);
-
+		gameBoard = new Board(boardPos, height);
 		ui = new UserInterface();
+		savedState = new TetrisMomento();
 		init();
 		
 		currentPiece = PieceFactory.generateRandomPiece(gameBoard, currentPieceSpeed);
@@ -67,7 +67,7 @@ public class GameManager extends JPanel implements KeyListener {
 	private void init() {
 		currentPieceSpeed = 1;
 		linesCleared = 0;
-		currentPieceSpeedCounter = 0;
+		
 		currentScore = 0;
 		gameBoard.init();
 		ui.restart();
@@ -101,11 +101,13 @@ public class GameManager extends JPanel implements KeyListener {
 				
 				if(rowsRemoved == 4) {
 					currentScore += BONUS_SCORE;
+					ui.setTempMessage("TETRIS!");
 				}
 				
 				if(currentPieceSpeedCounter >= LINES_CLEARED_TO_SPEEDUP) {
 					currentPieceSpeed -= PIECE_SPEED_INCREMENT;
 					currentPieceSpeedCounter -= LINES_CLEARED_TO_SPEEDUP;
+					ui.setTempMessage("Speed Up!");
 				}
 
 				ui.update(currentScore, linesCleared);
@@ -123,12 +125,17 @@ public class GameManager extends JPanel implements KeyListener {
 				}
 				init();
 			}
-            currentPiece = nextPiece;
-			nextPiece = PieceFactory.generateRandomPiece(gameBoard, currentPieceSpeed);
+
+			swapPieces();
 			
 			ui.newPiece(nextPiece);
 		}
         
+	}
+	
+	public void swapPieces() {
+        currentPiece = nextPiece;
+        nextPiece = PieceFactory.generateRandomPiece(gameBoard, currentPieceSpeed);
 	}
 
 	public void keyPressed(KeyEvent e) {
@@ -156,12 +163,57 @@ public class GameManager extends JPanel implements KeyListener {
 		else if (e.getKeyCode() == KeyEvent.VK_W) {
 			savedState = createMomento();
 		}
+		else if (e.getKeyCode() == KeyEvent.VK_R) {
+			loadMomento(savedState);
+		}
 		
 	}
 
-	private TetrisMomento createMomento() {
+	public TetrisMomento createMomento() {
 		TetrisMomento newMomento = new TetrisMomento();
+		//Adding things in the order they're declared, not sure of a better way.
+		Board boardCopy = gameBoard.copy();
+		newMomento.addObj(boardCopy);
+
+		newMomento.addObj(currentPiece.copy(boardCopy));
+		newMomento.addNum(currentPieceSpeed);
+
+		newMomento.addObj(nextPiece.copy(boardCopy));
+
+		newMomento.addNum(linesCleared);
+		newMomento.addNum(currentPieceSpeedCounter);
+		newMomento.addNum(currentScore);
+		ui.setTempMessage("Saved!");
 		return newMomento;
+	}
+
+	public void loadMomento(TetrisMomento momento) { //Passing in the momento makes externalization easy.
+		if(!momento.empty()) {
+			//Removing things in the order they're declared.
+			gameBoard = (Board)momento.removeObj();
+	
+			currentPiece = (Piece)momento.removeObj();
+			currentPieceSpeed = (Double)momento.removeNum();
+			nextPiece = (Piece)momento.removeObj();
+			linesCleared = (Integer)momento.removeNum();
+			currentPieceSpeedCounter = (Integer)momento.removeNum();
+			currentScore = (Integer)momento.removeNum();
+			
+			ui.update(currentScore, linesCleared);
+			ui.newPiece(nextPiece);
+			savedState = createMomento();
+			ui.setTempMessage("Loaded!");
+		} else {
+			ui.setTempMessage("Can't load!");
+		}
+	}
+	
+	public Piece getCurrentPiece() {
+		return currentPiece;
+	}
+	
+	public Piece getNextPiece() {
+		return nextPiece;
 	}
 
 	public void keyReleased(KeyEvent e) {

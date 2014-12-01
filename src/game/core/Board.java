@@ -11,7 +11,10 @@ public class Board {
 	private AbstractBlock[][] blocks;
 	private Point2D pos;
 	
-	public Board(Point2D pos, int width, int height) {
+	private int height;
+	
+	public Board(Point2D pos, int height) {
+		this.height = height;
 		AbstractBlock.SIZE = height / NUM_ROWS;
 		this.pos = pos;
 		blocks = new AbstractBlock[NUM_ROWS][NUM_COLS];
@@ -24,6 +27,20 @@ public class Board {
 			}
 		}
 		
+	}
+	
+	public Board copy() {
+		Board newBoard = new Board(pos, height);
+		newBoard.init();
+		
+		for(int i = 0; i < NUM_ROWS; ++i) {
+			for(int j = 0; j < NUM_COLS; ++j) {
+				AbstractBlock newBlock = blocks[i][j].copy(newBoard);
+				newBoard.placeBlock(newBlock, i, j);
+			}
+		}
+		
+		return newBoard;
 	}
 	
 	public boolean canPlaceAt(int row, int col) {
@@ -127,8 +144,7 @@ public class Board {
 		}
 	}
 
-	public boolean checkLoss() {
-		for(int i = 0; i < NUM_COLS; ++i) {
+	public boolean checkLoss() { for(int i = 0; i < NUM_COLS; ++i) {
 			boolean firstRowNull = !blocks[0][i].isSolid();
 			boolean secondRowNull = !blocks[1][i].isSolid();
 
@@ -137,5 +153,34 @@ public class Board {
 			}
 		}
 		return false;
+	}
+	
+	public boolean equals(Object other) {
+		if (other == null) {
+			return false;
+		}
+
+		if (!(other instanceof Board)) {
+			return false;
+		}
+		
+		Board otherBoard = (Board)other;
+		for (int i = 0; i < NUM_ROWS; ++i) {
+			for (int j = 0; j < NUM_COLS; ++j) {
+				if (!otherBoard.blocks[i][j].equals(this.blocks[i][j])) {
+					return false;
+				}
+			}
+		}
+
+		if (otherBoard.height != this.height) {
+			return false;
+		}
+		
+		if (!otherBoard.pos.equals(this.pos)) { 
+			return false;
+		}
+		
+		return true;
 	}
 }

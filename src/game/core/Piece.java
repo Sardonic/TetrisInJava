@@ -37,6 +37,17 @@ public class Piece {
 			gameBoard.placeBlock(new RealBlock(gameBoard, row, col, color), row, col);
 		}
 	}
+	
+	public Piece copy(Board newBoard) {
+		Point[] copyLocs = new Point[4];
+		copyLocs[0] = new Point(blockLocations[0].x, blockLocations[0].y);
+		copyLocs[1] = new Point(blockLocations[1].x, blockLocations[1].y);
+		copyLocs[2] = new Point(blockLocations[2].x, blockLocations[2].y);
+		copyLocs[3] = new Point(blockLocations[3].x, blockLocations[3].y);
+		Piece newPiece = new Piece(newBoard, copyLocs, color, secondsBetweenMoves);
+		
+		return newPiece;
+	}
 
 	public void removeBlocks() {
 		for(Point blockLoc : blockLocations) {
@@ -226,6 +237,45 @@ public class Piece {
 		}
 		
 		return willCollide;
+	}
+	
+	public boolean equals(Object other) {
+		if (other == null) {
+			return false;
+		}
+		
+		if (!(other instanceof Piece)) {
+			return false;
+		}
+		
+		Piece otherPiece = (Piece)other;
+		for (int i = 0; i < blockLocations.length; ++i) {
+			if (!otherPiece.blockLocations[i].equals(blockLocations[i])) {
+				return false;
+			}
+		}
+		
+		if (!color.equals(otherPiece.color)) {
+			return false;
+		}
+		
+		if (landed != otherPiece.landed) { 
+			return false;
+		}
+		
+		if (framesUntilMove != otherPiece.framesUntilMove) {
+			return false;
+		}
+		
+		if (moveMaxSpeed != otherPiece.moveMaxSpeed) {
+			return false;
+		}
+		
+		if (secondsBetweenMoves != otherPiece.secondsBetweenMoves) {
+			return false;
+		}
+		
+		return true;
 	}
 
 }

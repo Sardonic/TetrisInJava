@@ -22,6 +22,11 @@ public class NullBlock extends AbstractBlock {
 		super.draw(g);
 	}
 
+	public AbstractBlock copy(Board board) {
+		AbstractBlock block = new NullBlock(board, row, col);
+		return block;
+	}
+
 	public boolean isSolid() {
 		return false;
 	}

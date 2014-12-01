@@ -25,9 +25,8 @@ public class PieceTests {
 	@Before
 	public void init() {
 		Point2D boardPos = new Point2D.Double(0, 0);
-		int width = 640;
 		int height = 480;
-		board = new Board(boardPos, width, height);
+		board = new Board(boardPos, height);
 		board.init();
 		Point[] blockLocs = new Point[ORIG_LOCATIONS.length];
 		for (int i = 0; i < ORIG_LOCATIONS.length; ++i) {

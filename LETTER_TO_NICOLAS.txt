@@ -1,0 +1,36 @@
+Hey Nicolas,
+
+So, originally we were going to use the observer pattern for the UI. It seemed
+like a good choice in designing the architecture of the project but, as often
+happens in software development, it quickly become a burden in implementation.
+We have set up this GameManager class in order to manage interactions between
+game objects. This is incredibly convenient as it allows us to really isolate
+the individual game objects. It allows us to write game object functions that are
+relatively pure and pass meaningful information back to the GameManager, which
+the manager can then use as it needs. We understand that this model might not
+be ideal for larger projects -- the GameManager could bloat to a massive size
+and become unmanageable, much less helpful. That being said, this is Tetris.
+The game runs on calculators. The GameManager is a simple, elegant, clean
+solution for our problems. We wanted to use the Observer to separate the
+display from the game logic. Fortunately the game manager does that and it
+separates the game logic pieces from each other as well! The Observer lets us
+lower coupling, which is great! But it also involves two classes working in
+tandem, sending messages, receiving them at the right time, and handling them.
+It adds a layer of complication with its abstraction. Is that worth it? The
+abstract layer we've created with our GameManager class works differently. It
+simply asks the game objects to execute functions and return it values. With
+those values it can decide to call other functions, set variables, or just do
+nothing. Yes, the manager is coupled with everything, but that's the point. The
+manager lets every other piece of the code be that much more modular. The board
+doesn't have to know anything at all about score representation nor does it
+have to implement any special interfaces. It just returns the number of lines
+cleared when lines are cleared. Implementation is easier, testing is easier,
+comprehension is easier, writing is easier, extension is easier, reuse is easier.
+
+This is why we've chosen to not implement the observer pattern in our project.
+We have also not chosen to implement any additional patterns to replace it
+because we couldn't find a pattern to add to our project without making the
+project unnecessarily complex, and aren't patterns all about reducing the unnecessary?
+
+Cheers,
+David and Scott.

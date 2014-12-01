@@ -24,7 +24,7 @@ public abstract class AbstractBlock {
 		this.board = block.board;
 		this.color = block.color;
 	}
-
+	
 	public void draw(Graphics g) {
 		g.setColor(Color.BLACK);
 		Point2D pos = board.getPixelPosAtIndex(row, col);
@@ -32,5 +32,34 @@ public abstract class AbstractBlock {
 		int y = (int)pos.getY();
 		g.drawRect(x, y, SIZE, SIZE);
 	}
+	
+	public boolean equals(Object other) {
+		if (other == null) {
+			return false;
+		}
+		
+		if (!(other instanceof AbstractBlock)) {
+			return false;
+		}
+		
+		AbstractBlock otherBlock = (AbstractBlock)other;
+		
+		if (otherBlock.row != this.row) { 
+			return false;
+		}
+		
+		if (otherBlock.col != this.col) {
+			return false;
+		}
+		
+		if (!otherBlock.color.equals(this.color)) {
+			return false;
+		}
+		
+		return true;
+	}
+
+	public abstract AbstractBlock copy(Board board);
+
 	public abstract boolean isSolid();
 }

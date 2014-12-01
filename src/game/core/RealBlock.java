@@ -33,6 +33,11 @@ public class RealBlock extends AbstractBlock {
 		super.draw(g);
 	}
 	
+	public AbstractBlock copy(Board board) {
+		AbstractBlock block = new RealBlock(board, row, col, color);
+		return block;
+	}
+
 	public boolean isSolid() {
 		return true;
 	}
